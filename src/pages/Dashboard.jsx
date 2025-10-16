@@ -58,7 +58,7 @@ const Dashboard = () => {
     setLastUpdated(new Date());
   };
 
-  const getSeverityColor = (severity: string) => {
+  const getSeverityColor = (severity) => {
     switch (severity) {
       case "high":
         return "destructive";
