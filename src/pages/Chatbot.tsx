@@ -7,8 +7,15 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Send, Bot, User, Volume2 } from "lucide-react";
 import Navigation from "@/components/Navigation";
 
+interface Message {
+  id: number;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+}
+
 const Chatbot = () => {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
       role: "assistant",
@@ -19,7 +26,7 @@ const Chatbot = () => {
   const [input, setInput] = useState("");
   const [language, setLanguage] = useState("en");
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -32,7 +39,7 @@ const Chatbot = () => {
   const handleSend = () => {
     if (!input.trim()) return;
 
-    const userMessage = {
+    const userMessage: Message = {
       id: messages.length + 1,
       role: "user",
       content: input,
@@ -44,7 +51,7 @@ const Chatbot = () => {
 
     // Simulate AI response
     setTimeout(() => {
-      const aiResponse = {
+      const aiResponse: Message = {
         id: messages.length + 2,
         role: "assistant",
         content: getAIResponse(input),
@@ -54,14 +61,14 @@ const Chatbot = () => {
     }, 1000);
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
   };
 
-  const handleTextToSpeech = (text) => {
+  const handleTextToSpeech = (text: string) => {
     if ('speechSynthesis' in window) {
       setIsSpeaking(true);
       const utterance = new SpeechSynthesisUtterance(text);
@@ -71,7 +78,7 @@ const Chatbot = () => {
     }
   };
 
-  const getAIResponse = (query) => {
+  const getAIResponse = (query: string): string => {
     const lowerQuery = query.toLowerCase();
     
     if (lowerQuery.includes("soil") && lowerQuery.includes("moisture")) {
